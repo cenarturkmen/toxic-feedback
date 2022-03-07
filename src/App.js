@@ -1,11 +1,15 @@
 import './App.css';
 import Form from './Components/Form';
+import Comment from './Components/Comment';
 import {useState, useEffect} from 'react';
 import classify from './Utils/Classify';
+import postFeedback from './Utils/PostFeedBack';
+import getFeedBack from './Utils/GetFeedBack';
 
 function App() {
   const [form, setForm] = useState({});
   const [classification, setClassification] = useState('');
+  const [feedbacks, setFeedbacks] = useState([]);
 
   const handleFormChange = (event) => {
     const {name, value} = event.target;
@@ -17,18 +21,21 @@ function App() {
 
   const handleSend = async (event) => {
     event.preventDefault();
-    let results = classify(form.message).then(function (results) {
-      setClassification(results);
-      console.log(results);
-    });
+    if (form.name && form.email && form.message) {
+      let predictions = await classify(form.message);
+      if (predictions.length > 0) {
+        await postFeedback(form.name, form.email, form.message, predictions);
+      }
+    }
   };
 
-  // useEffect(() => {
-  //   setClassification(classify(form.message));
-  //   console.log(classification);
-  // }, [form.message]);
-
-  console.log(form);
+  useEffect(() => {
+    getFeedBack().then((data) => {
+      setFeedbacks(data);
+    });
+    console.log('feedbacks', feedbacks);
+  } 
+  , []);
   return (
     <div className="flex justify-center">
       <div>
@@ -41,6 +48,7 @@ function App() {
           className=""
         />
         <p className="text-white">{JSON.stringify(classification, null, 3)}</p>
+      <Comment />
       </div>
     </div>
   );
