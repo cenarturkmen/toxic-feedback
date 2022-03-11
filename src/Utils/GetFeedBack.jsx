@@ -7,6 +7,7 @@ const getFeedback = async () => {
     headers: {
       'Content-Type': 'application/json',
     },
+    redirect : 'follow',
   });
 };
 

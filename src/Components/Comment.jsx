@@ -1,9 +1,11 @@
 
 
-const Comment = () => {
+const Comment = (props) => {
     return (
         <div className="comment">
-         Its comment
+        {props.name}
+        {props.mail}
+        {props.toxicity}
         </div>
     );
 

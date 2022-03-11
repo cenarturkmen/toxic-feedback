@@ -21,6 +21,10 @@ function App() {
 
   const handleSend = async (event) => {
     event.preventDefault();
+    let feedbacks2 = await getFeedBack();
+    console.log(feedbacks2) 
+    let response = await feedbacks2.JSON();
+    console.log(response);
     if (form.name && form.email && form.message) {
       let predictions = await classify(form.message);
       if (predictions.length > 0) {
@@ -30,12 +34,13 @@ function App() {
   };
 
   useEffect(() => {
-    getFeedBack().then((data) => {
-      setFeedbacks(data);
-    });
-    console.log('feedbacks', feedbacks);
-  } 
-  , []);
+    getFeedBack() .then(response => response.text())
+    .then(result => setFeedbacks(result.data))
+    .catch(error => console.log('error', error));
+  }, []);
+
+
+
   return (
     <div className="flex justify-center">
       <div>
@@ -48,7 +53,7 @@ function App() {
           className=""
         />
         <p className="text-white">{JSON.stringify(classification, null, 3)}</p>
-      <Comment />
+        <Comment />
       </div>
     </div>
   );
