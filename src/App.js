@@ -1,18 +1,18 @@
-import './App.css';
-import Form from './Components/Form';
-import Comment from './Components/Comment';
-import {useState, useEffect} from 'react';
-import classify from './Utils/Classify';
-import postFeedback from './Utils/PostFeedBack';
-import getFeedBack from './Utils/GetFeedBack';
+import "./App.css";
+import Form from "./Components/Form";
+import Comment from "./Components/Comment";
+import { useState, useEffect } from "react";
+import classify from "./Utils/Classify";
+import postFeedback from "./Utils/PostFeedBack";
+import getFeedBack from "./Utils/GetFeedBack";
 
 function App() {
   const [form, setForm] = useState({});
-  const [classification, setClassification] = useState('');
-  const [feedbacks, setFeedbacks] = useState([]);
+  const [classification, setClassification] = useState("");
+  const [feedbacks, setFeedbacks] = useState();
 
   const handleFormChange = (event) => {
-    const {name, value} = event.target;
+    const { name, value } = event.target;
     setForm({
       ...form,
       [name]: value,
@@ -22,7 +22,7 @@ function App() {
   const handleSend = async (event) => {
     event.preventDefault();
     let feedbacks2 = await getFeedBack();
-    console.log(feedbacks2) 
+    console.log(feedbacks2);
     let response = await feedbacks2.JSON();
     console.log(response);
     if (form.name && form.email && form.message) {
@@ -33,13 +33,13 @@ function App() {
     }
   };
 
-  useEffect(() => {
-    getFeedBack() .then(response => response.text())
-    .then(result => setFeedbacks(result.data))
-    .catch(error => console.log('error', error));
+  // write a function that will get the feedbacks from the server and set them to the state of feedbacks
+  // use utils/getFeedBack to get the feedbacks from the server
+  useEffect(async () => {
+    let feedbacks2 = await getFeedBack();
+    let response =  await feedbacks2.text();
+    setFeedbacks(JSON.parse(response));
   }, []);
-
-
 
   return (
     <div className="flex justify-center">
@@ -52,8 +52,17 @@ function App() {
           handleFormChange={handleFormChange}
           className=""
         />
-        <p className="text-white">{JSON.stringify(classification, null, 3)}</p>
-        <Comment />
+        { }
+        {feedbacks && feedbacks.data.map((feedback, key) => (
+          <Comment
+            key = {key}
+            name={feedback.Name}
+            email={feedback.Email}
+            message={feedback.Message}
+            className=""
+          />
+        ))}
+        
       </div>
     </div>
   );
