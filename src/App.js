@@ -8,7 +8,6 @@ import getFeedBack from "./Utils/GetFeedBack";
 
 function App() {
   const [form, setForm] = useState({});
-  const [classification, setClassification] = useState("");
   const [feedbacks, setFeedbacks] = useState();
 
   const handleFormChange = (event) => {
@@ -21,10 +20,6 @@ function App() {
 
   const handleSend = async (event) => {
     event.preventDefault();
-    let feedbacks2 = await getFeedBack();
-    console.log(feedbacks2);
-    let response = await feedbacks2.JSON();
-    console.log(response);
     if (form.name && form.email && form.message) {
       let predictions = await classify(form.message);
       if (predictions.length > 0) {
@@ -35,11 +30,15 @@ function App() {
 
   // write a function that will get the feedbacks from the server and set them to the state of feedbacks
   // use utils/getFeedBack to get the feedbacks from the server
-  useEffect(async () => {
+  const userFeedbacks = async () => {
     let feedbacks2 = await getFeedBack();
     let response =  await feedbacks2.text();
     setFeedbacks(JSON.parse(response));
-  }, []);
+  }
+
+  useEffect( () => {
+    userFeedbacks()
+  }, [])
 
   return (
     <div className="flex justify-center">
@@ -57,8 +56,9 @@ function App() {
           <Comment
             key = {key}
             name={feedback.Name}
-            email={feedback.Email}
+            email={feedback.Mail}
             message={feedback.Message}
+            toxicity = {JSON.parse(feedback["Toxic Results"])}
             className=""
           />
         ))}
@@ -67,5 +67,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
