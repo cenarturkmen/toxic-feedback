@@ -19,26 +19,35 @@ function App() {
   };
 
   const handleSend = async (event) => {
+    let currentdate = new Date();
+    let datetime = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear()
     event.preventDefault();
     if (form.name && form.email && form.message) {
       let predictions = await classify(form.message);
       if (predictions.length > 0) {
-        await postFeedback(form.name, form.email, form.message, predictions);
+        await postFeedback(
+          form.name,
+          form.email,
+          form.message,
+          predictions,
+          datetime
+        );
       }
     }
   };
 
-  // write a function that will get the feedbacks from the server and set them to the state of feedbacks
-  // use utils/getFeedBack to get the feedbacks from the server
-  const userFeedbacks = async () => {
-    let feedbacks2 = await getFeedBack();
-    let response =  await feedbacks2.text();
-    setFeedbacks(JSON.parse(response));
-  }
 
-  useEffect( () => {
-    userFeedbacks()
-  }, [])
+  const getFeedbacks = async () => {
+    let response = await getFeedBack();
+    let data = await response.json();
+    setFeedbacks(data);
+  };
+
+  useEffect(() => {
+    getFeedbacks();
+  }, []);
 
   return (
     <div className="flex justify-center">
@@ -51,18 +60,18 @@ function App() {
           handleFormChange={handleFormChange}
           className=""
         />
-        { }
-        {feedbacks && feedbacks.data.map((feedback, key) => (
-          <Comment
-            key = {key}
-            name={feedback.Name}
-            email={feedback.Mail}
-            message={feedback.Message}
-            toxicity = {JSON.parse(feedback["Toxic Results"])}
-            className=""
-          />
-        ))}
-        
+        {feedbacks &&
+          feedbacks.map((feedback, key) => (
+            <Comment
+              key={key}
+              name={feedback.name}
+              email={feedback.email}
+              message={feedback.message}
+              toxicity={JSON.parse(feedback.result)}
+              date={feedback.date}
+              className=""
+            />
+          ))}
       </div>
     </div>
   );

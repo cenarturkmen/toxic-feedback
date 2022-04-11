@@ -1,15 +1,20 @@
 const postUrl =
-  "https://v1.nocodeapi.com/hellocaner/google_sheets/PDhftGpbEqaEXvVe?tabId=feedback";
+  "https://toxic-feedback.herokuapp.com/api/v1/feedback/addFeedback";
 
-const postFeedback = async (name, mail, message, results) => {
+const postFeedback = async (name, mail, message, results, date) => {
   return await fetch(postUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify([[name, mail, message, JSON.stringify(results)]]),
+    body: JSON.stringify({
+      "name": name,
+      "email": mail,
+      "message": message,
+      "result": JSON.stringify(results),
+      "date": date
+    }),
   });
 };
 
 export default postFeedback;
-

@@ -1,5 +1,5 @@
 const getUrl =
-  'https://v1.nocodeapi.com/hellocaner/google_sheets/PDhftGpbEqaEXvVe?tabId=feedback';
+   'https://toxic-feedback.herokuapp.com/api/v1/feedback/feedbacks';
 
 const getFeedback = async () => {
   return await fetch(getUrl, {
