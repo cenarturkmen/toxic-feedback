@@ -1,13 +1,12 @@
-const getUrl =
-   'https://toxic-feedback.herokuapp.com/api/v1/feedback/feedbacks';
+const getUrl = "https://toxic-feedback.herokuapp.com/api/v1/feedback/feedbacks";
 
 const getFeedback = async () => {
   return await fetch(getUrl, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    redirect : 'follow',
+    redirect: "follow",
   });
 };
 
