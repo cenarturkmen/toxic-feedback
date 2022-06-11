@@ -13,7 +13,7 @@ For the TensorFlowJS part, you look at it the [original repo](!https://github.co
 
 - Frontend --> React, Tailwind, Material UI, and TensorFlowJS.
 
-- For [backend](https://github.com/cenarturkmen/toxic-feedback-be)--> Java, SpringBoot and MongoDB.
+- [Backend](https://github.com/cenarturkmen/toxic-feedback-be)--> Java, SpringBoot and MongoDB.
 
 ### Deployments
 You can check the app [here](https://toxic-feedback.vercel.app/).
